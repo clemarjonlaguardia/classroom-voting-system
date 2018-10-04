@@ -1,3 +1,6 @@
+import java.sql.*;
+import javax.swing.JOptionPane;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -6,16 +9,31 @@
 
 /**
  *
- * @author Admin
+ * @author Laguardia
  */
 public class logins extends javax.swing.JFrame {
-
+    Connection con;
+    ResultSet rs;
+    PreparedStatement pst;
+    
     /**
      * Creates new form logins
      */
     public logins() {
         initComponents();
     }
+    
+    public Connection getConnection(){      
+        
+        try{                                                                        //username //database         =pass no password
+            Connection con = (Connection)DriverManager.getConnection("jdbc:mysql://localhost/voting_system","root","");
+            return con; 
+        }      
+        catch(Exception e){          
+        }
+       
+        return null;
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -26,34 +44,32 @@ public class logins extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        usertext = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        passtext = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel1.setPreferredSize(new java.awt.Dimension(400, 300));
-
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        usertext.setFont(new java.awt.Font("Courier New", 1, 18)); // NOI18N
+        usertext.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                usertextActionPerformed(evt);
+            }
+        });
+        usertext.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                usertextKeyPressed(evt);
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Courier New", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("ID Number");
 
         jLabel2.setFont(new java.awt.Font("Courier New", 1, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel2.setText("Password");
 
@@ -61,35 +77,38 @@ public class logins extends javax.swing.JFrame {
         jButton2.setFont(new java.awt.Font("Courier New", 1, 24)); // NOI18N
         jButton2.setText("LOGIN");
         jButton2.setToolTipText("");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton2MouseEntered(evt);
+            }
+        });
+        jButton2.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                jButton2InputMethodTextChanged(evt);
+            }
+        });
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(51, 153, 255));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("forgot password?");
-        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel5MouseClicked(evt);
+        passtext.setFont(new java.awt.Font("Courier New", 1, 18)); // NOI18N
+        passtext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                passtextActionPerformed(evt);
             }
         });
-
-        jLabel6.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(51, 153, 255));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("create account");
-        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel6MouseClicked(evt);
+        passtext.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                passtextKeyPressed(evt);
             }
         });
 
         jButton1.setBackground(new java.awt.Color(0, 0, 0));
-        jButton1.setFont(new java.awt.Font("Courier New", 1, 12)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setFont(new java.awt.Font("Courier New", 1, 18)); // NOI18N
         jButton1.setText("Main Menu");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -97,112 +116,253 @@ public class logins extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(85, 85, 85)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField1)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(88, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE))
-                .addGap(139, 139, 139))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(78, 78, 78)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
-                        .addGap(36, 36, 36))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(65, 65, 65))
-        );
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 424, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(139, 139, 139)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(95, 95, 95)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(usertext)
+                            .addComponent(passtext, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(157, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 342, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(111, 111, 111)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1)
+                            .addComponent(usertext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(9, 9, 9)
+                        .addComponent(passtext, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(27, 27, 27)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addContainerGap(153, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void usertextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usertextActionPerformed
+        
+        String yes="yes";
+        String no="no";
+        String passid=usertext.getText();
+        String login = "SELECT * FROM account WHERE id_number ='"+usertext.getText()+"' AND password = '"+passtext.getText() + " ' AND status = '"+no +"'";
+        String already = "SELECT * FROM account WHERE id_number ='"+usertext.getText()+"' AND password = '"+passtext.getText() + " ' AND status = '"+yes +"'";
+        String incorrect = "SELECT * FROM account WHERE id_number !='"+usertext.getText()+"' AND password != '"+passtext.getText() + " ' ";        
+                   
+        try{               
+            Connection con = getConnection();                           
+            pst = con.prepareStatement(login); 
+            
+            PreparedStatement pst1= con.prepareStatement(incorrect);                 
+            ResultSet rs1;       
+            rs1 = pst1.executeQuery();
+    
+            PreparedStatement pst2= con.prepareStatement(already);    
+            ResultSet rs2;                   
+            rs2 = pst2.executeQuery();                
+            rs = pst.executeQuery();                
+                
+            if(rs.next()){                 
+                rs.close();                
+                pst.close();                
+                JOptionPane.showMessageDialog(null,"Sucess!");             
+                setVisible(false);
+              
+                new voting(passid).setVisible(true);          
+            }                                
+            else if (rs2.next()){             
+                JOptionPane.showMessageDialog(null, "You already vote!");            
+                usertext.setText(null);            
+                passtext.setText(null);         
+            }                            
+            else if (rs1.next()){           
+                JOptionPane.showMessageDialog(null, "Incorrect ID number AND Passowrd!");           
+                usertext.setText(null);                        
+                passtext.setText(null);           
+            }       
+        }                       
+        catch(Exception e){                 
+        }
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_usertextActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+                     
+        String yes="yes"; 
+        String no="no";
+        String passid=usertext.getText();              
+        String login = "SELECT * FROM account WHERE id_number ='"+usertext.getText()+"' AND password = '"+passtext.getText() + " ' AND status = '"+no +"'";
+        String already = "SELECT * FROM account WHERE id_number ='"+usertext.getText()+"' AND password = '"+passtext.getText() + " ' AND status = '"+yes +"'";
+        String incorrect = "SELECT * FROM account WHERE id_number !='"+usertext.getText()+"' AND password != '"+passtext.getText() + " ' ";
+        
+        try{                     
+            Connection con = getConnection();           
+            pst = con.prepareStatement(login);            
+            rs = pst.executeQuery();
+            
+            PreparedStatement pst1= con.prepareStatement(incorrect);
+            ResultSet rs1;        
+            rs1 = pst1.executeQuery();
+            
+            PreparedStatement pst2= con.prepareStatement(already);
+            ResultSet rs2;        
+            rs2 = pst2.executeQuery();
+                   
+            if(rs.next()){           
+                rs.close();
+                pst.close();                
+                JOptionPane.showMessageDialog(null,"Sucess!");                
+                setVisible(false);              
+                new voting(passid).setVisible(true);                        
+            }                                    
+            else if (rs2.next()){
+                JOptionPane.showMessageDialog(null, "You already vote!");
+                usertext.setText(null);
+                passtext.setText(null);
+            }            
+            else if (rs1.next()){
+                JOptionPane.showMessageDialog(null, "Incorrect ID number AND Passowrd!");                
+                usertext.setText(null);
+                passtext.setText(null);
+            }                  
+        }        
+        catch(Exception e){                   
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
-        setVisible(false);
-        register reg = new register();
-        reg.setVisible(true);
-        
-        reg.setLocationRelativeTo(null);
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jLabel6MouseClicked
-
-    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        setVisible(false);
-        forgot forg = new forgot();
-        forg.setVisible(true);
-        
-        forg.setLocationRelativeTo(null);
-        //forg.setLocationRelativeTo(null);
-           
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jLabel5MouseClicked
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         setVisible(false);
         mainmenu main = new mainmenu();
-        main.setVisible(true);
-        
+        main.setVisible(true);       
         main.setLocationRelativeTo(null);
 
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButton2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2MouseEntered
+
+    private void jButton2InputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jButton2InputMethodTextChanged
+
+        String yes="yes";  
+        String no="no";
+        String passid=usertext.getText();              
+        String login = "SELECT * FROM account WHERE id_number ='"+usertext.getText()+"' AND password = '"+passtext.getText() + " ' AND status = '"+no +"'";
+        String already = "SELECT * FROM account WHERE id_number ='"+usertext.getText()+"' AND password = '"+passtext.getText() + " ' AND status = '"+yes +"'";
+        String incorrect = "SELECT * FROM account WHERE id_number !='"+usertext.getText()+"' AND password != '"+passtext.getText() + " ' ";
+        
+        try{                       
+            Connection con = getConnection();          
+            pst = con.prepareStatement(login);                       
+                       
+            PreparedStatement pst1= con.prepareStatement(incorrect);
+            ResultSet rs1;        
+            rs1 = pst1.executeQuery();                                           
+               
+            PreparedStatement pst2= con.prepareStatement(already);
+            ResultSet rs2;         
+            rs2 = pst2.executeQuery();                    
+            rs = pst.executeQuery();
+           
+            if(rs.next()){                             
+                rs.close();
+                pst.close();               
+                JOptionPane.showMessageDialog(null,"Sucess!");                              
+                setVisible(false);                
+                new voting(passid).setVisible(true);            
+            }                                  
+            else if (rs2.next()){
+                JOptionPane.showMessageDialog(null, "You already vote!");
+                usertext.setText(null);
+                passtext.setText(null);
+            }
+            else if (rs1.next()){
+                JOptionPane.showMessageDialog(null, "Incorrect ID number AND Passowrd!");
+                 usertext.setText(null);
+                passtext.setText(null);
+            }                                                     
+        }              
+        catch(Exception e){                 
+        }     
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2InputMethodTextChanged
+
+    private void passtextKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passtextKeyPressed
+       // TODO add your handling code here:
+    }//GEN-LAST:event_passtextKeyPressed
+
+    private void usertextKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usertextKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_usertextKeyPressed
+
+    private void passtextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passtextActionPerformed
+         
+        String yes="yes";  
+        String no="no";
+        String passid=usertext.getText();               
+        String login = "SELECT * FROM account WHERE id_number ='"+usertext.getText()+"' AND password = '"+passtext.getText() + " ' AND status = '"+no +"'";
+        String already = "SELECT * FROM account WHERE id_number ='"+usertext.getText()+"' AND password = '"+passtext.getText() + " ' AND status = '"+yes +"'";
+        String incorrect = "SELECT * FROM account WHERE id_number !='"+usertext.getText()+"' AND password != '"+passtext.getText() + " ' ";
+        
+        try{                      
+            Connection con = getConnection();           
+            pst = con.prepareStatement(login);
+                                              
+            PreparedStatement pst1= con.prepareStatement(incorrect);
+            ResultSet rs1;         
+            rs1 = pst1.executeQuery();
+                                   
+            PreparedStatement pst2= con.prepareStatement(already);
+            ResultSet rs2;         
+            rs2 = pst2.executeQuery();                     
+            rs = pst.executeQuery();
+        
+            if(rs.next()){              
+                rs.close();
+                pst.close();               
+                JOptionPane.showMessageDialog(null,"Sucess!");                       
+                setVisible(false);                
+                new voting(passid).setVisible(true);              
+            }           
+            else if (rs2.next()){
+                JOptionPane.showMessageDialog(null, "You already vote!");
+                usertext.setText(null);
+                passtext.setText(null);
+            }                  
+            else if (rs1.next()){
+                JOptionPane.showMessageDialog(null, "Incorrect ID number AND Passowrd!");     
+                usertext.setText(null);
+                passtext.setText(null);
+            }                                                   
+        }          
+        catch(Exception e){                
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passtextActionPerformed
 
     /**
      * @param args the command line arguments
@@ -244,10 +404,7 @@ public class logins extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JPasswordField passtext;
+    private javax.swing.JTextField usertext;
     // End of variables declaration//GEN-END:variables
 }
