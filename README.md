@@ -4,7 +4,7 @@
 
 <h2>Java Developer</h2>
 <ol><li>Clemarjon Laguardia</li> 
-  <li>James Capangpangan</li></ol>
+  <li>Angelito Kundiman Jr.</li></ol>
 <br>
 <h2>UI Designer</h2>
 <ol><li>Clemarjon Laguardia</li></ol>
